@@ -52,7 +52,11 @@ class AppTextButton extends StatelessWidget {
               if (prefix != null) prefix!,
               Text(
                 title,
-                style: AppFonts.h4SFPro.copyWith(color: contentColor),
+                style: AppFonts.h5.copyWith(
+                  color: contentColor,
+                  decoration: TextDecoration.underline,
+                  decorationColor: contentColor,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
               if (postfix != null) postfix!

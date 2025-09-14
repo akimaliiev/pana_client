@@ -5,17 +5,12 @@ enum Flavor {
 
 class AppConfig {
   final Flavor flavor;
-  final String deviceId;
 
   AppConfig({
     required this.flavor,
-    required this.deviceId,
   });
 
-  factory AppConfig.fromFlavor(
-    Flavor flavor, {
-    required String deviceId,
-  }) {
+  factory AppConfig.fromFlavor(Flavor flavor) {
     switch (flavor) {
       case Flavor.prod:
         break;
@@ -24,9 +19,6 @@ class AppConfig {
         break;
     }
 
-    return AppConfig(
-      flavor: flavor,
-      deviceId: deviceId,
-    );
+    return AppConfig(flavor: flavor);
   }
 }

@@ -4,7 +4,8 @@ publish_to: 'none'
 version: 0.0.1+1
 
 environment:
-  sdk: '>=3.4.4 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.29.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -33,7 +34,7 @@ flutter_launcher_icons:
   ios: true
   android: true
   remove_alpha_ios: true
-  image_path: "core_ui/resources/images/logo.png"
+  image_path: "core_ui/resources/images/icon.png"
 
 flutter:
   uses-material-design: true

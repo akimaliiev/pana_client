@@ -5,3 +5,4 @@ import 'package:core_ui/core_ui.dart';
 
 part 'core_ui_event.dart';
 part 'show_toast.dart';
+part 'show_error_toast.dart';

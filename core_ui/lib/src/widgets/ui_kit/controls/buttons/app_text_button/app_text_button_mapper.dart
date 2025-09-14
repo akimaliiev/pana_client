@@ -6,9 +6,7 @@ class AppTextButtonMapper {
     required AppTextButtonStyle style,
   }) {
     return switch (style) {
-      AppTextButtonStyle.primary => colors.onPrimary,
-      AppTextButtonStyle.secondary => colors.text.tertiary,
-      AppTextButtonStyle.accent => colors.accent,
+      AppTextButtonStyle.primary => colors.text.primary,
     };
   }
 }

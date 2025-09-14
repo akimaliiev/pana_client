@@ -37,6 +37,7 @@ class ApiProvider {
           compact: false,
           logPrint: (Object object) => log(object.toString(), name: _networkKey),
         ),
+        ExceptionsInterceptor(),
       ],
     );
   }

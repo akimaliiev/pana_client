@@ -36,7 +36,7 @@ class AuthInterceptor extends Interceptor {
     if (_isPublic(err.requestOptions.uri.path)) return handler.next(err);
 
     if ((err.response?.statusCode == 401 || err.response?.statusCode == 403) &&
-        err.requestOptions.uri.path != '/app/v1/customer/auth/refresh') {
+        err.requestOptions.uri.path != '/app/${ApiProvidersVersions.authProviderVersion}/customer/auth/refresh') {
       try {
         final String? newAccessToken = await _refreshToken();
 
@@ -65,10 +65,10 @@ class AuthInterceptor extends Interceptor {
     if (refreshToken == null) return null;
 
     try {
-      final Response<Map<String, dynamic>> response = await Dio().post(
-        '/app/v1/customer/auth/refresh',
+      final Response<Map<String, dynamic>> response = await _dio.post(
+        '/app/${ApiProvidersVersions.authProviderVersion}/customer/auth/refresh',
         data: <String, String>{
-          'refresh_token': refreshToken,
+          'refreshToken': refreshToken,
         },
       );
 

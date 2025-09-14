@@ -1,0 +1,25 @@
+name: auth
+publish_to: none
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.29.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  core:
+    path: ../../core
+  domain:
+    path: ../../domain
+  core_ui:
+    path: ../../core_ui
+  navigation:
+    path: ../../navigation
+
+  pinput: ^5.0.2
+
+dev_dependencies:
+  auto_route_generator: ^10.2.4
+  build_runner: ^2.7.1

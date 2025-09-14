@@ -1,16 +1,16 @@
 part of theme;
 
 abstract final class AppDimens {
-  static const double borderRadiusSmallest = 12;
-  static const double borderRadiusSmall = 20;
-  static const double borderRadiusMedium = 24;
-  static const double borderRadiusLarge = 30;
+  static const double borderRadiusSmallest = 8;
+  static const double borderRadiusSmall = 12;
+  static const double borderRadiusMedium = 20;
+  static const double borderRadiusLarge = 24;
 
-  static const double defaultPagePadding = 16;
-  static const double defaultBorderWidth = 2;
-  static const double defaultButtonHeight = 60;
+  static const double defaultPagePadding = 40;
+  static const double defaultBorderWidth = 1;
+  static const double defaultButtonHeight = 42;
   static const double defaultInputHeight = 44;
-  static const double defaultAppBarHeight = 42;
+  static const double defaultAppBarHeight = 40;
 
   static const double spacerSmallest = 4;
   static const double spacerExtraSmall = 8;

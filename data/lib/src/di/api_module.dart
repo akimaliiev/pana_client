@@ -14,6 +14,7 @@ abstract class ApiModule {
   @singleton
   Map<String, dynamic> get headers => <String, dynamic>{
         'Content-Type': 'application/json',
+        'x-api-key': dotenv.env['API_KEY'],
       };
 
   @injectable

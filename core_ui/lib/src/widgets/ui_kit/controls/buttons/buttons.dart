@@ -1,3 +1,4 @@
+export 'app_checkbox.dart';
 export 'app_elevated_button/app_elevated_button.dart';
 export 'app_icon_button/app_icon_button.dart';
 export 'app_outlined_button/app_outlined_button.dart';

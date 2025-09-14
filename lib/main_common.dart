@@ -16,12 +16,7 @@ Future<void> mainCommon(Flavor flavor) async {
       WidgetsFlutterBinding.ensureInitialized();
       await ScreenService.setPreferredOrientation();
 
-      final String deviceId = await IdService.deviceId;
-
-      await configureDependencies(
-        flavor: flavor,
-        deviceId: deviceId,
-      );
+      await configureDependencies(flavor: flavor);
 
       runApp(const App());
     },

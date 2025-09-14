@@ -6,11 +6,7 @@ class AppIconButtonMapper {
     required AppIconButtonStyle style,
   }) {
     return switch (style) {
-      AppIconButtonStyle.primary => colors.primary,
-      AppIconButtonStyle.secondary => colors.text.tertiary,
-      AppIconButtonStyle.active => colors.accent,
-      AppIconButtonStyle.inactive => colors.onPrimary,
-      AppIconButtonStyle.accent => colors.onAccent,
+      AppIconButtonStyle.primary => colors.text.primary,
     };
   }
 
@@ -19,11 +15,7 @@ class AppIconButtonMapper {
     required AppIconButtonStyle style,
   }) {
     return switch (style) {
-      AppIconButtonStyle.primary => colors.onPrimary,
-      AppIconButtonStyle.secondary => colors.background.secondary,
-      AppIconButtonStyle.active => colors.primary,
-      AppIconButtonStyle.inactive => colors.primary,
-      AppIconButtonStyle.accent => colors.accent,
+      AppIconButtonStyle.primary => colors.background.primary,
     };
   }
 }

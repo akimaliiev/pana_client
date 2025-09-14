@@ -56,7 +56,7 @@ final class AppBackgroundTheme {
 
   Color get accent => AppColors.orange500;
 
-  Color get error => AppColors.red100;
+  Color get error => AppColors.red200;
 
   Color get success => AppColors.green100;
 
@@ -65,10 +65,27 @@ final class AppBackgroundTheme {
   Color get info => AppColors.blue100;
 
   Color get muted => AppColors.gray100;
+
+  LinearGradient get primaryGradient => const LinearGradient(
+        colors: <Color>[AppColors.red100, AppColors.white, AppColors.white, AppColors.yellow100],
+        stops: <double>[0.0, 0.45, 0.55, 1.0],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
+
+  LinearGradient get accentGradient => const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: <Color>[AppColors.red500, AppColors.yellow500],
+      );
 }
 
 final class AppTextTheme {
   Color get primary => AppColors.black;
+
+  Color get accent => AppColors.orange500;
+
+  Color get invertedPrimary => AppColors.white;
 
   Color get secondary => AppColors.gray600;
 
@@ -98,7 +115,7 @@ final class AppStatusTheme {
 
   Color get successBackground => AppColors.green100;
 
-  Color get errorBackground => AppColors.red100;
+  Color get errorBackground => AppColors.red200;
 
   Color get warningBackground => AppColors.amber100;
 
@@ -109,6 +126,8 @@ final class AppInteractiveTheme {
   Color get active => AppColors.orange500;
 
   Color get inactive => AppColors.gray400;
+
+  Color get inactiveAccent => AppColors.orange300;
 
   Color get hover => AppColors.orange700;
 

@@ -25,7 +25,7 @@ class AppTextFieldMapper {
     required AppTextFieldStyle style,
   }) {
     return switch (style) {
-      AppTextFieldStyle.primary => colors.border.accent,
+      AppTextFieldStyle.primary => colors.border.primary,
     };
   }
 
