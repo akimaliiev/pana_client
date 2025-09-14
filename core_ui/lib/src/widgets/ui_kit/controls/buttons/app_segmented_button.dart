@@ -31,7 +31,7 @@ class AppSegmentedButton<T extends Enum> extends StatelessWidget {
               const SizedBox(width: AppDimens.spacerExtraSmall),
               Text(
                 nameBuilder(value),
-                style: AppFonts.h6SFPro.copyWith(
+                style: AppFonts.h6.copyWith(
                   color: colors.accent,
                   fontWeight: FontWeight.w600,
                 ),
@@ -47,10 +47,7 @@ class AppSegmentedButton<T extends Enum> extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.primary,
         borderRadius: BorderRadius.circular(AppDimens.borderRadiusSmallest),
-        border: Border.all(
-          color: colors.border.primary,
-          width: AppDimens.defaultBorderWidth,
-        ),
+        border: Border.all(color: colors.border.primary),
       ),
       child: CupertinoSlidingSegmentedControl<T>(
         onValueChanged: (T? value) => onChange(value!),

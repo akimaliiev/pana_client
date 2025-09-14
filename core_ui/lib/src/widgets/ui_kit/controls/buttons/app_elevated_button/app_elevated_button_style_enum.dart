@@ -1,3 +1,4 @@
 enum AppElevatedButtonStyle {
   primary,
+  accent,
 }

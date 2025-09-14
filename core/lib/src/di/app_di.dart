@@ -20,11 +20,10 @@ const String authScope = 'authScope';
     ExternalModule(DomainPackageModule),
   ],
 )
-Future<void> configureDependencies({required Flavor flavor, required String deviceId}) async {
+Future<void> configureDependencies({required Flavor flavor}) async {
   appLocator.registerLazySingleton<AppConfig>(
     () => AppConfig.fromFlavor(
       flavor,
-      deviceId: deviceId,
     ),
   );
 

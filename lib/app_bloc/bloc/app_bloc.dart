@@ -9,6 +9,7 @@ part 'app_event.dart';
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
+  final AppLocalization _localization;
   final AppEventObserver _appEventObserver;
 
   StreamSubscription<CoreEvent>? _coreEventsSubscription;
@@ -16,8 +17,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   StreamSubscription<DataEvent>? _dataEventsSubscription;
 
   AppBloc({
+    required AppLocalization localization,
     required AppEventObserver appEventObserver,
-  })  : _appEventObserver = appEventObserver,
+  })  : _localization = localization,
+        _appEventObserver = appEventObserver,
         super(const AppState.initial()) {
     on<CoreEventReceived>(_onCoreEventReceived);
     on<CoreUiEventReceived>(_onCoreUiEventReceived);
@@ -48,10 +51,43 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       case ShowToast():
         emit(
           state.copyWith(
-            toastMessage: kDebugMode ? result.error ?? result.message : result.message,
+            toastMessage: kDebugMode ? result.message : result.message,
             toastType: result.type,
           ),
         );
+        break;
+      case ShowErrorToast():
+        final dynamic exception = result.exception;
+        switch (exception) {
+          case ClientErrorException():
+            _showErrorToast(emit, _localization.core_errors_request_clientError);
+          case ForbiddenException():
+            _showErrorToast(emit, _localization.core_errors_request_forbidden);
+          case InternetConnectionException():
+            _showErrorToast(emit, _localization.core_errors_request_internetConnection);
+          case NotContainsAllDataException():
+            _showErrorToast(emit, _localization.core_errors_request_notContainsAllData);
+          case NotFoundException():
+            _showErrorToast(emit, _localization.core_errors_request_notFound);
+          case ServerErrorException():
+            _showErrorToast(emit, _localization.core_errors_request_serverError);
+          case SessionExpiredException():
+            _showErrorToast(emit, _localization.core_errors_request_sessionExpired);
+          case SourceException():
+            _showErrorToast(emit, _localization.core_errors_request_source);
+          case DataMappingException():
+            _showErrorToast(emit, _localization.core_errors_dataMapping_source);
+          default:
+            _showErrorToast(emit, _localization.core_errors_unknown);
+        }
+
+        emit(
+          state.copyWith(
+            toastMessage: kDebugMode ? result.message : result.message,
+            toastType: ToastType.error,
+          ),
+        );
+        break;
     }
   }
 
@@ -106,5 +142,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     await _dataEventsSubscription?.cancel();
 
     await super.close();
+  }
+
+  void _showErrorToast(Emitter<AppState> emit, String message) {
+    emit(state.copyWith(toastMessage: message, toastType: ToastType.error));
   }
 }

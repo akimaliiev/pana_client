@@ -38,22 +38,7 @@ class AppElevatedButton extends StatelessWidget {
       style: style,
     );
 
-    final Color inactiveContentColor = AppElevatedButtonMapper.getInactiveContentColor(
-      colors: colors,
-      style: style,
-    );
-
     final Color backgroundColor = AppElevatedButtonMapper.getBackgroundColor(
-      colors: colors,
-      style: style,
-    );
-
-    final Color inactiveBackgroundColor = AppElevatedButtonMapper.getInactiveBackgroundColor(
-      colors: colors,
-      style: style,
-    );
-
-    final Color shadowColor = AppElevatedButtonMapper.getShadowColor(
       colors: colors,
       style: style,
     );
@@ -65,12 +50,13 @@ class AppElevatedButton extends StatelessWidget {
           padding: padding,
           foregroundColor: contentColor,
           backgroundColor: backgroundColor,
-          disabledForegroundColor: inactiveContentColor,
-          disabledBackgroundColor: inactiveBackgroundColor,
-          shadowColor: shadowColor,
+          disabledForegroundColor: colors.interactive.onInactive,
+          disabledBackgroundColor: colors.interactive.inactive,
           elevation: 5,
+          shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimens.borderRadiusLarge),
+            borderRadius: BorderRadius.circular(AppDimens.borderRadiusSmallest),
+            side: BorderSide(color: colors.border.primary),
           ),
         ),
         onPressed: state == ElementState.enabled ? onTap : null,
@@ -89,7 +75,7 @@ class AppElevatedButton extends StatelessWidget {
                       child: Text(
                         title,
                         overflow: TextOverflow.ellipsis,
-                        style: titleStyle ?? AppFonts.h3SFPro,
+                        style: titleStyle ?? AppFonts.h5,
                       ),
                     ),
                     if (postfix != null) postfix!,

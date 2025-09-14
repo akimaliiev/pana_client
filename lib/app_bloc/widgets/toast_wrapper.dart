@@ -11,7 +11,10 @@ class AppBlocProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AppBloc>(
-      create: (_) => AppBloc(appEventObserver: appLocator<AppEventObserver>()),
+      create: (_) => AppBloc(
+        localization: context.localization,
+        appEventObserver: appLocator<AppEventObserver>(),
+      ),
       child: Builder(
         builder: (BuildContext context) {
           final AppBloc bloc = context.read<AppBloc>();

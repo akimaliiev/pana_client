@@ -12,6 +12,15 @@ class TokenRepositoryImpl implements TokenRepository {
   }) : _secureStorageProvider = secureStorageProvider;
 
   @override
+  Future<bool> get hasTokens async {
+    final String? accessToken = await _secureStorageProvider.read(key: _accessTokenKey);
+    final String? refreshToken = await _secureStorageProvider.read(key: _refreshTokenKey);
+    final bool result = (accessToken?.isNotEmpty ?? false) && (refreshToken?.isNotEmpty ?? false);
+
+    return result;
+  }
+
+  @override
   Future<String?> get accessToken => _secureStorageProvider.read(key: _accessTokenKey);
 
   @override

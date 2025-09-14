@@ -38,7 +38,7 @@ class AppSwitchableTile extends StatelessWidget {
         if (title != null)
           Text(
             title ?? '',
-            style: AppFonts.h5SFPro,
+            style: AppFonts.h5,
           ),
         Container(
           padding: const EdgeInsets.symmetric(
@@ -54,7 +54,7 @@ class AppSwitchableTile extends StatelessWidget {
             children: <Widget>[
               Text(
                 content,
-                style: AppFonts.h4SFPro.copyWith(color: colors.primary),
+                style: AppFonts.h4.copyWith(color: colors.primary),
               ),
               AppSwitch(
                 style: appSwitchStyle,

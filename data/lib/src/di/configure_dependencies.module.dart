@@ -10,6 +10,7 @@ import 'package:core/core.dart' as _i494;
 import 'package:data/src/di/api_module.dart' as _i737;
 import 'package:data/src/di/local_data_module.dart' as _i967;
 import 'package:data/src/providers/api/api_provider.dart' as _i357;
+import 'package:data/src/providers/api/auth/auth_api_provider.dart' as _i151;
 import 'package:data/src/providers/local/local_providers.dart' as _i37;
 import 'package:data/src/providers/local/local_secure_storage_provider.dart'
     as _i3;
@@ -35,6 +36,7 @@ class DataPackageModule extends _i526.MicroPackageModule {
         () => localDataModule.secureStorage);
     gh.factory<_i665.LocalStorageProvider>(
         () => _i665.LocalStorageProvider(gh<_i460.SharedPreferences>()));
+    gh.singleton<_i494.AppRepository>(() => _i876.AppRepositoryImpl());
     gh.singleton<String>(
       () => apiModule.baseUrl,
       instanceName: 'BaseUrl',
@@ -54,6 +56,13 @@ class DataPackageModule extends _i526.MicroPackageModule {
           gh<_i494.TokenRepository>(),
         ));
     gh.singleton<_i361.Dio>(() => apiModule.dio(gh<_i357.ApiProvider>()));
+    gh.factory<_i151.AuthApiProvider>(
+        () => _i151.AuthApiProvider.new(gh<_i361.Dio>()));
+    gh.singleton<_i494.AuthRepository>(() => _i876.AuthRepositoryImpl(
+          apiProvider: gh<_i151.AuthApiProvider>(),
+          tokenRepository: gh<_i494.TokenRepository>(),
+          appRepository: gh<_i494.AppRepository>(),
+        ));
   }
 }
 

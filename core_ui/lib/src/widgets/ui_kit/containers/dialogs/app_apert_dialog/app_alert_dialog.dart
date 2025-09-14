@@ -48,7 +48,7 @@ class AppAlertDialog extends StatelessWidget {
       title: title != null
           ? Text(
               title ?? '',
-              style: AppFonts.h4SFPro,
+              style: AppFonts.h4,
               textAlign: TextAlign.center,
             )
           : null,
@@ -57,7 +57,7 @@ class AppAlertDialog extends StatelessWidget {
               textAlign: TextAlign.center,
               text: TextSpan(
                 text: content,
-                style: AppFonts.h5SFPro.copyWith(color: colors.onPrimary),
+                style: AppFonts.h5.copyWith(color: colors.onPrimary),
                 children: <InlineSpan>[
                   ...?spans,
                 ],

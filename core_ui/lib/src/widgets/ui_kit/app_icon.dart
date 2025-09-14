@@ -2,14 +2,20 @@ import 'package:core_ui/core_ui.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppIcon {
-  static const String _svgFileRegex = r'.svg$';
-  static const double _iconSize = AppDimens.iconSizeMedium;
+  static const double _iconSize = AppDimens.iconSizeSmall;
 
-  final String iconKey;
+  final String? _svgAsset;
+  final IconData? _iconData;
 
-  bool get isSVG => iconKey.contains(RegExp(_svgFileRegex));
+  const AppIcon._({
+    String? svgAsset,
+    IconData? iconData,
+  })  : _svgAsset = svgAsset,
+        _iconData = iconData;
 
-  const AppIcon(this.iconKey);
+  const AppIcon.asset(String assetKey) : this._(svgAsset: assetKey);
+
+  const AppIcon.data(IconData iconData) : this._(iconData: iconData);
 
   Widget call({
     Color? color,
@@ -18,10 +24,31 @@ class AppIcon {
     Function()? onTap,
     double padding = 0,
   }) {
-    assert(
-      isSVG,
-      'Implemented only for svg',
-    );
+    Widget iconWidget;
+
+    if (_svgAsset != null) {
+      iconWidget = SvgPicture.asset(
+        _svgAsset!,
+        package: kPackageName,
+        colorFilter: color != null
+            ? ColorFilter.mode(
+                color,
+                BlendMode.srcIn,
+              )
+            : null,
+        fit: fit ?? BoxFit.contain,
+        height: size,
+        width: size,
+      );
+    } else if (_iconData != null) {
+      iconWidget = Icon(
+        _iconData,
+        size: size,
+        color: color,
+      );
+    } else {
+      iconWidget = const SizedBox.shrink();
+    }
 
     return Builder(
       builder: (BuildContext context) {
@@ -32,19 +59,7 @@ class AppIcon {
             onTap: onTap,
             child: Padding(
               padding: EdgeInsets.all(padding),
-              child: SvgPicture.asset(
-                iconKey,
-                package: kPackageName,
-                colorFilter: color != null
-                    ? ColorFilter.mode(
-                        color,
-                        BlendMode.srcIn,
-                      )
-                    : null,
-                fit: fit ?? BoxFit.contain,
-                height: size,
-                width: size,
-              ),
+              child: iconWidget,
             ),
           ),
         );

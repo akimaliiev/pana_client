@@ -30,8 +30,8 @@ class AppRetry extends StatelessWidget {
               ),
             ),
           Text(
-            message ?? localization.errors_core_unknown,
-            style: AppFonts.h4SFPro.copyWith(color: colors.onPrimary),
+            message ?? localization.core_errors_unknown,
+            style: AppFonts.h4.copyWith(color: colors.onPrimary),
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             maxLines: 2,

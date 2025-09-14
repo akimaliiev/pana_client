@@ -41,10 +41,7 @@ class AppOutlinedButton extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           foregroundColor: contentColor,
           disabledForegroundColor: colors.interactive.onInactive,
-          side: BorderSide(
-            color: borderColor,
-            width: AppDimens.defaultBorderWidth,
-          ),
+          side: BorderSide(color: borderColor),
         ),
         onPressed: state == ElementState.enabled ? onTap : null,
         child: SizedBox(
@@ -60,7 +57,7 @@ class AppOutlinedButton extends StatelessWidget {
                     Flexible(
                       child: Text(
                         title,
-                        style: AppFonts.h3SFPro,
+                        style: AppFonts.h3,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),

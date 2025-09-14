@@ -4,12 +4,15 @@ abstract final class AppColors {
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
 
+  static const Color orange300 = Color(0xFFD67B5A);
   static const Color orange500 = Color(0xFFE55A2B);
   static const Color orange700 = Color(0xFFB45309);
 
+  static const Color yellow100 = Color(0xFFF3EFDA);
   static const Color yellow500 = Color(0xFFF2C94C);
 
-  static const Color red100 = Color(0xFFFEE2E2);
+  static const Color red100 = Color(0xFFEFD4D4);
+  static const Color red200 = Color(0xFFFEE2E2);
   static const Color red500 = Color(0xFFEF4444);
   static const Color red800 = Color(0xFF991B1B);
 

@@ -6,7 +6,8 @@ class AppElevatedButtonMapper {
     required AppElevatedButtonStyle style,
   }) {
     return switch (style) {
-      AppElevatedButtonStyle.primary => colors.accent,
+      AppElevatedButtonStyle.primary => colors.background.primary,
+      AppElevatedButtonStyle.accent => colors.background.accent,
     };
   }
 
@@ -15,34 +16,8 @@ class AppElevatedButtonMapper {
     required AppElevatedButtonStyle style,
   }) {
     return switch (style) {
-      AppElevatedButtonStyle.primary => colors.onAccent,
-    };
-  }
-
-  static Color getInactiveBackgroundColor({
-    required AppColorsTheme colors,
-    required AppElevatedButtonStyle style,
-  }) {
-    return switch (style) {
-      AppElevatedButtonStyle.primary => colors.interactive.inactive,
-    };
-  }
-
-  static Color getInactiveContentColor({
-    required AppColorsTheme colors,
-    required AppElevatedButtonStyle style,
-  }) {
-    return switch (style) {
-      AppElevatedButtonStyle.primary => colors.interactive.onInactive,
-    };
-  }
-
-  static Color getShadowColor({
-    required AppColorsTheme colors,
-    required AppElevatedButtonStyle style,
-  }) {
-    return switch (style) {
-      AppElevatedButtonStyle.primary => colors.shadow,
+      AppElevatedButtonStyle.primary => colors.text.primary,
+      AppElevatedButtonStyle.accent => colors.text.invertedPrimary,
     };
   }
 }
