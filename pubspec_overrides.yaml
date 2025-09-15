@@ -1,3 +1,0 @@
-dependency_overrides:
-  core_ui:
-    path: features/user_profile/_vendor/core_ui
