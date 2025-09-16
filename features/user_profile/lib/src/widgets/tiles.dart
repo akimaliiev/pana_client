@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Плитка-навигация (по умолчанию БЕЗ стрелки).
 class NavTile extends StatelessWidget {
   const NavTile({
     super.key,
@@ -21,12 +20,14 @@ class NavTile extends StatelessWidget {
     return ListTile(
       title: Text(
         title,
-        style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w700, color: Colors.black87),
+        style: t.bodyMedium
+            ?.copyWith(fontWeight: FontWeight.w700, color: Colors.black87),
       ),
       subtitle: subtitle == null
           ? null
-          : Text(subtitle!, style: t.bodyMedium?.copyWith(color: Colors.black54)),
-      trailing: trailing, // null => без стрелки
+          : Text(subtitle!,
+              style: t.bodyMedium?.copyWith(color: Colors.black54)),
+      trailing: trailing,
       onTap: onTap,
     );
   }
@@ -70,7 +71,7 @@ class SelectField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: onTap, // важное: onTap теперь снаружи управляет показом меню
+        onTap: onTap,
         child: Container(
           height: 52,
           padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -97,9 +98,6 @@ class SelectField extends StatelessWidget {
   }
 }
 
-
-/// Ряд с переключателем.
-/// [gapTop] позволяет сделать дополнительный отступ сверху (между свитчами).
 class SwitchTile extends StatefulWidget {
   const SwitchTile({
     super.key,
@@ -133,7 +131,8 @@ class _SwitchTileState extends State<SwitchTile> {
         leading: widget.leading,
         title: Text(
           widget.label,
-          style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w600, color: Colors.black87),
+          style: t.bodyMedium
+              ?.copyWith(fontWeight: FontWeight.w600, color: Colors.black87),
         ),
         trailing: Switch.adaptive(
           value: _value,

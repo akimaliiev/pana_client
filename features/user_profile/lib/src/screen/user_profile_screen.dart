@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:core/core.dart';
 import 'package:core_ui/core_ui.dart';
+import 'package:navigation/navigation.dart';
+
 import '../bloc/user_profile_bloc.dart';
 import '../bloc/user_profile_event.dart';
 import '../bloc/user_profile_state.dart';
@@ -8,14 +12,21 @@ import '../widgets/group_card.dart';
 import '../widgets/header.dart';
 import '../widgets/tiles.dart';
 import '../utils/labels.dart';
+import '../data/user_repository.dart';
 
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => UserProfileBloc()..add(const UserProfileLoadRequested()),
+    final AppLocalization localization = context.localization;
+    return BlocProvider<UserProfileBloc>(
+      create: (_) => UserProfileBloc(
+        localization: localization,
+        appRouter: appLocator<AppRouter>(),
+        appEventNotifier: appLocator<AppEventNotifier>(),
+        userRepository: appLocator<UserRepository>(),
+      )..add(const UserProfileLoadRequested()),
       child: const _View(),
     );
   }
@@ -23,7 +34,6 @@ class UserProfileScreen extends StatelessWidget {
 
 class _View extends StatefulWidget {
   const _View();
-
   @override
   State<_View> createState() => _ViewState();
 }
@@ -31,6 +41,7 @@ class _View extends StatefulWidget {
 class _ViewState extends State<_View> {
   final GlobalKey _langAnchor = GlobalKey();
   final GlobalKey _currAnchor = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
@@ -43,56 +54,35 @@ class _ViewState extends State<_View> {
       body: BlocBuilder<UserProfileBloc, UserProfileState>(
         builder: (context, state) {
           return SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: AppDimens.l),
+            padding: const EdgeInsets.only(bottom: AppDimens.borderRadiusLarge),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: AppDimens.m),
-
-                // Header
+                const SizedBox(height: AppDimens.borderRadiusMedium),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: AppDimens.page),
+                  padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacerMedium),
                   child: Header(
-                    initial: (state.displayName.isNotEmpty
-                            ? state.displayName[0]
-                            : 'Г')
-                        .toUpperCase(),
+                    initial: (state.displayName.isNotEmpty ? state.displayName[0] : 'Г').toUpperCase(),
                     title: state.displayName,
                     chip: state.roleLabel,
                   ),
                 ),
-
-                const SizedBox(height: AppDimens.m),
-
-                // Основные действия
+                const SizedBox(height: AppDimens.spacerMedium),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: AppDimens.page),
+                  padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacerMedium),
                   child: GroupCard(
                     title: 'Основные действия',
                     children: const [
-                      NavTile(
-                          title: 'Мои бронирования',
-                          subtitle: 'История и активные бронирования'),
-                      NavTile(
-                          title: 'Избранное', subtitle: 'Сохранённые объекты'),
-                      NavTile(
-                          title: 'История оплат',
-                          subtitle: 'Платежи и квитанции'),
-                      NavTile(
-                          title: 'Чат с поддержкой',
-                          subtitle: 'Помощь и консультации'),
+                      NavTile(title: 'Мои бронирования', subtitle: 'История и активные бронирования'),
+                      NavTile(title: 'Избранное', subtitle: 'Сохранённые объекты'),
+                      NavTile(title: 'История оплат', subtitle: 'Платежи и квитанции'),
+                      NavTile(title: 'Чат с поддержкой', subtitle: 'Помощь и консультации'),
                     ],
                   ),
                 ),
-
-                const SizedBox(height: AppDimens.m),
-
-                // Настройки
+                const SizedBox(height: AppDimens.spacerMedium),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: AppDimens.page),
+                  padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacerMedium),
                   child: GroupCard(
                     title: 'Настройки',
                     children: [
@@ -109,14 +99,8 @@ class _ViewState extends State<_View> {
                               _Option(LanguageOption.ru, 'Русский'),
                               _Option(LanguageOption.kk, 'Қазақ тілі'),
                               _Option(LanguageOption.en, 'English'),
-                              // _Option(LanguageOption.es,  'Español'),
-                              // _Option(LanguageOption.tr,  'Türkçe'),
-                              // _Option(LanguageOption.zh,  '中文'),
                             ],
-                            onSelected: (v) =>
-                                context.read<UserProfileBloc>().add(
-                                      UserProfileLanguageChanged(v),
-                                    ),
+                            onSelected: (v) => context.read<UserProfileBloc>().add(UserProfileLanguageChanged(v)),
                           ),
                         ),
                       ),
@@ -135,10 +119,7 @@ class _ViewState extends State<_View> {
                               _Option(CurrencyOption.usd, '\$ Доллар'),
                               _Option(CurrencyOption.eur, '€ Евро'),
                             ],
-                            onSelected: (v) =>
-                                context.read<UserProfileBloc>().add(
-                                      UserProfileCurrencyChanged(v),
-                                    ),
+                            onSelected: (v) => context.read<UserProfileBloc>().add(UserProfileCurrencyChanged(v)),
                           ),
                         ),
                       ),
@@ -148,28 +129,20 @@ class _ViewState extends State<_View> {
                         label: 'Push-уведомления',
                         initial: state.pushEnabled,
                         leading: const Icon(Icons.smartphone),
-                        onChanged: (v) => context
-                            .read<UserProfileBloc>()
-                            .add(UserProfilePushToggled(v)),
+                        onChanged: (v) => context.read<UserProfileBloc>().add(UserProfilePushToggled(v)),
                       ),
                       SwitchTile(
                         label: 'Email-уведомления',
                         initial: state.emailEnabled,
-                        gapTop: 12, // визуальный зазор как на эталоне
-                        onChanged: (v) => context
-                            .read<UserProfileBloc>()
-                            .add(UserProfileEmailToggled(v)),
+                        gapTop: 12,
+                        onChanged: (v) => context.read<UserProfileBloc>().add(UserProfileEmailToggled(v)),
                       ),
                     ],
                   ),
                 ),
-
-                const SizedBox(height: AppDimens.m),
-
-                // === Информация (как на вашем 1-м скрине: БЕЗ заголовка, с разделителями) ===
+                const SizedBox(height: AppDimens.spacerMedium),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: AppDimens.page),
+                  padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacerMedium),
                   child: Card(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -183,12 +156,9 @@ class _ViewState extends State<_View> {
                     ),
                   ),
                 ),
-
-                const SizedBox(height: AppDimens.l),
-
+                const SizedBox(height: AppDimens.spacerExtraLarge),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: AppDimens.page),
+                  padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacerMedium),
                   child: Center(
                     child: Text(
                       'Версия приложения ${_formatVersion(state.appVersion)}',
@@ -196,23 +166,18 @@ class _ViewState extends State<_View> {
                     ),
                   ),
                 ),
-
-                const SizedBox(height: AppDimens.m),
-
-                // CTA «Войти в аккаунт» — pill как на эталоне
+                const SizedBox(height: AppDimens.spacerMedium),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: AppDimens.page),
+                  padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacerMedium),
                   child: FilledButton(
                     style: FilledButton.styleFrom(
                       backgroundColor: const Color(0xFFD62626),
                       minimumSize: const Size.fromHeight(52),
-                      shape:
-                          const StadiumBorder(), // полностью скруглённая кнопка
-                      textStyle: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w700),
+                      shape: const StadiumBorder(),
+                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                    },
                     child: const Text('Войти в аккаунт'),
                   ),
                 ),
@@ -231,10 +196,8 @@ class _ViewState extends State<_View> {
     required List<_Option<T>> options,
     required ValueChanged<T> onSelected,
   }) async {
-    final RenderBox box =
-        anchorKey.currentContext!.findRenderObject() as RenderBox;
-    final RenderBox overlay =
-        Overlay.of(context).context.findRenderObject() as RenderBox;
+    final RenderBox box = anchorKey.currentContext!.findRenderObject() as RenderBox;
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
 
     final RelativeRect position = RelativeRect.fromRect(
       Rect.fromPoints(
@@ -268,12 +231,9 @@ class _ViewState extends State<_View> {
     if (selected != null) onSelected(selected);
   }
 }
+
 class _MenuRow extends StatelessWidget {
-  const _MenuRow({
-    required this.width,
-    required this.label,
-    required this.selected,
-  });
+  const _MenuRow({required this.width, required this.label, required this.selected});
 
   final double width;
   final String label;
@@ -283,16 +243,14 @@ class _MenuRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
     return SizedBox(
-      width: width, // ширина = ширине поля
+      width: width,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Row(
           children: [
             SizedBox(
               width: 22,
-              child: selected
-                  ? const Icon(Icons.check, size: 18, color: Colors.black87)
-                  : const SizedBox.shrink(),
+              child: selected ? const Icon(Icons.check, size: 18, color: Colors.black87) : const SizedBox.shrink(),
             ),
             const SizedBox(width: 6),
             Expanded(
@@ -308,8 +266,6 @@ class _MenuRow extends StatelessWidget {
     );
   }
 }
-
-// ——— helpers ———
 
 class _Option<T> {
   final T value;
@@ -339,7 +295,7 @@ class _InfoTile extends StatelessWidget {
           style: t.bodyMedium?.copyWith(
             fontWeight: FontWeight.w700,
             color: Colors.black87,
-            height: 1.2, // немного плотнее
+            height: 1.2,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -347,12 +303,4 @@ class _InfoTile extends StatelessWidget {
       ),
     );
   }
-}
-
-class AppDimens {
-  static const double page = 16;
-  static const double s = 8;
-  static const double m = 16;
-  static const double l = 24;
-  static const double radius = 16;
 }

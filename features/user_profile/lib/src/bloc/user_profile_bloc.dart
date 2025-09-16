@@ -1,68 +1,93 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
+import '../data/user_api.dart';
 import 'user_profile_event.dart';
 import 'user_profile_state.dart';
+import 'package:core/core.dart';
+import 'package:core_ui/core_ui.dart';
+import 'package:navigation/navigation.dart';
+import '../data/user_repository.dart';
 
 class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
-  UserProfileBloc() : super(UserProfileState.initial()) {
-    on<UserProfileLoadRequested>(_onLoad);
-    on<UserProfileLanguageChanged>((e, emit) => emit(state.copyWith(language: e.value)));
-    on<UserProfileCurrencyChanged>((e, emit) => emit(state.copyWith(currency: e.value)));
-    on<UserProfilePushToggled>((e, emit) => emit(state.copyWith(pushEnabled: e.enabled)));
-    on<UserProfileEmailToggled>((e, emit) => emit(state.copyWith(emailEnabled: e.enabled)));
-  }
+  final AppLocalization _localization;
+  final AppRouter _appRouter;
+  final AppEventNotifier _appEventNotifier;
+  final UserRepository _userRepository;
 
-  Future<void> _onLoad(UserProfileLoadRequested event, Emitter<UserProfileState> emit) async {
+  UserProfileBloc({
+    required AppLocalization localization,
+    required AppRouter appRouter,
+    required AppEventNotifier appEventNotifier,
+    required UserRepository userRepository,
+  })  : _localization = localization,
+        _appRouter = appRouter,
+        _appEventNotifier = appEventNotifier,
+        _userRepository = userRepository,
+        super(UserProfileState.initial()) {
+    on<UserProfileLoadRequested>(_onLoad);
+    on<UserProfileLanguageChanged>(_onLanguageChanged);
+    on<UserProfileCurrencyChanged>(_onCurrencyChanged);
+    on<UserProfilePushToggled>(_onPushToggled);
+    on<UserProfileEmailToggled>(_onEmailToggled);
+  }
+  Future<void> _onLoad(
+    UserProfileLoadRequested event,
+    Emitter<UserProfileState> emit,
+  ) async {
+    emit(state.copyWith(state: FragmentState.partLoading));
+
     try {
       final info = await PackageInfo.fromPlatform();
-      emit(state.copyWith(appVersion: '${info.version}+${info.buildNumber}'));
-    } catch (_) {
+      final profile = await _userRepository.loadProfile();
+
+      emit(
+        state.copyWith(
+          state: FragmentState.active,
+          appVersion: '${info.version}+${info.buildNumber}',
+          displayName: (profile.name?.trim().isNotEmpty ?? false)
+              ? profile.name!.trim()
+              : 'Гость',
+          roleLabel: profile.role.isNotEmpty ? profile.role : 'Гость',
+        ),
+      );
+    } on UnauthorizedException catch (e) {
+      _appEventNotifier.notify(ShowErrorToast(exception: e));
+      emit(state.copyWith(state: FragmentState.active));
+    } on ApiException catch (e) {
+      _appEventNotifier.notify(ShowErrorToast(exception: e));
+      emit(state.copyWith(state: FragmentState.active));
+    } catch (e) {
+      _appEventNotifier.notify(ShowErrorToast(exception: e));
+      emit(state.copyWith(state: FragmentState.active));
     }
   }
+
+  void _onLanguageChanged(
+    UserProfileLanguageChanged event,
+    Emitter<UserProfileState> emit,
+  ) {
+    emit(state.copyWith(language: event.value));
+  }
+
+  void _onCurrencyChanged(
+    UserProfileCurrencyChanged event,
+    Emitter<UserProfileState> emit,
+  ) {
+    emit(state.copyWith(currency: event.value));
+  }
+
+  void _onPushToggled(
+    UserProfilePushToggled event,
+    Emitter<UserProfileState> emit,
+  ) {
+    emit(state.copyWith(pushEnabled: event.enabled));
+  }
+
+  void _onEmailToggled(
+    UserProfileEmailToggled event,
+    Emitter<UserProfileState> emit,
+  ) {
+    emit(state.copyWith(emailEnabled: event.enabled));
+  }
 }
-
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:user_profile/src/data/user_api.dart';
-// import '../data/user_repository.dart';
-// import '../data/models/customer_profile.dart';
-// import 'user_profile_event.dart';
-// import 'user_profile_state.dart';
-
-// class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
-//   UserProfileBloc({UserRepository? repository})
-//       : _repo = repository ?? UserRepository(),
-//         super(UserProfileState.initial()) {
-//     on<UserProfileLoadRequested>(_onLoad);
-//     on<UserProfileLanguageChanged>((e, emit) => emit(state.copyWith(language: e.value)));
-//     on<UserProfileCurrencyChanged>((e, emit) => emit(state.copyWith(currency: e.value)));
-//     on<UserProfilePushToggled>((e, emit) => emit(state.copyWith(pushEnabled: e.enabled)));
-//     on<UserProfileEmailToggled>((e, emit) => emit(state.copyWith(emailEnabled: e.enabled)));
-//   }
-
-//   final UserRepository _repo;
-
-//   Future<void> _onLoad(UserProfileLoadRequested e, Emitter<UserProfileState> emit) async {
-//     emit(state.copyWith(isLoading: true, error: null, authExpired: false));
-//     try {
-//       final CustomerProfile p = await _repo.loadProfile();
-
-//       final displayName = (p.name?.trim().isNotEmpty ?? false) ? p.name!.trim() : 'Гость';
-//       final role = p.role.isNotEmpty ? p.role : 'guest';
-
-//       emit(state.copyWith(
-//         isLoading: false,
-//         displayName: displayName,
-//         roleLabel: role == 'customer' ? 'Гость' : role, // map as you need
-//         phone: p.phone,
-//         email: p.email,
-//         // you can also map locale/currency from p.localeId / p.currencyId if needed
-//       ));
-//     } on UnauthorizedException {
-//       emit(state.copyWith(isLoading: false, authExpired: true));
-//     } catch (err) {
-//       emit(state.copyWith(isLoading: false, error: err.toString()));
-//     }
-//   }
-// }

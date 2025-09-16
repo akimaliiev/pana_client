@@ -28,4 +28,12 @@ abstract final class AppDimens {
   static const Duration animationDurationShort = Duration(milliseconds: 300);
   static const Duration animationDurationMedium = Duration(milliseconds: 600);
   static const Duration animationDurationLong = Duration(milliseconds: 1100);
+
+
+  // static const double page = 16;
+  // static const double s = 8;
+  // static const double m = 16;
+  // static const double l = 24;
+  // static const double radius = 16;
+
 }

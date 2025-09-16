@@ -16,7 +16,8 @@ class GroupCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(AppDimens.m, AppDimens.m, AppDimens.m, AppDimens.s),
+              padding: const EdgeInsets.fromLTRB(
+                  AppDimens.spacerMedium, AppDimens.spacerMedium, AppDimens.spacerMedium, AppDimens.spacerExtraSmall),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -47,10 +48,4 @@ class GroupSeparator extends StatelessWidget {
     );
   }
 }
-class AppDimens {
-  static const double page = 16;
-  static const double s = 8;
-  static const double m = 16;
-  static const double l = 24;
-  static const double radius = 16;
-}
+
